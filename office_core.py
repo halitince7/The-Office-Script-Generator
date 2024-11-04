@@ -24,6 +24,8 @@ def create_script_document(season, episodes):
         # Read the CSV file
         episodes_found = set()
         current_episode = None
+        current_scene = None
+        scene_counter = 1  # Initialize scene counter
         
         with open('The-Office-Lines-V4.csv', 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
@@ -36,6 +38,15 @@ def create_script_document(season, episodes):
                         current_episode = row['episode']
                         heading = doc.add_heading(f"Season {season}, Episode {current_episode}: {row['title']}", level=1)
                         doc.add_paragraph()  # Add some spacing
+                        current_scene = None  # Reset scene tracking
+                        scene_counter = 1  # Reset scene counter for new episode
+                    
+                    # Add scene header if it's a new scene
+                    if current_scene != row['scene']:
+                        current_scene = row['scene']
+                        scene_heading = doc.add_heading(f"Scene {scene_counter}", level=2)
+                        scene_heading.style.font.size = Pt(12)  # Make scene headers smaller
+                        scene_counter += 1  # Increment scene counter
                     
                     # Format the line with bold speaker
                     paragraph = doc.add_paragraph()

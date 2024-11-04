@@ -1,11 +1,6 @@
-import csv
-import docx
-import subprocess
-import os
-from docx.shared import Pt
-from docx.enum.text import WD_LINE_SPACING
 import tkinter as tk
 from tkinter import ttk, messagebox
+from office_core import create_script_document
 
 class OfficeScriptGUI:
     def __init__(self, root):
@@ -48,69 +43,18 @@ class OfficeScriptGUI:
             episodes_list = episodes.split(',')
             # Validate input
             season_num = int(season)
-            episodes_nums = [int(ep.strip()) for ep in episodes_list]
+            [int(ep.strip()) for ep in episodes_list]  # Validate all episodes are numbers
             
             self.status_var.set("Generating scripts...")
             self.root.update()
             
-            self.create_document(str(season_num), episodes_list)
+            success, message, _ = create_script_document(str(season_num), episodes_list)
+            self.status_var.set(message)
+            if not success:
+                messagebox.showerror("Error", message)
             
         except ValueError:
             messagebox.showerror("Error", "Please enter valid numbers")
-            return
-
-    def create_document(self, season, episodes):
-        try:
-            # Create a new Word document
-            doc = docx.Document()
-
-            # Set margins (0.5 inches = 457200 EMUs)
-            sections = doc.sections
-            for section in sections:
-                section.left_margin = 457200
-                section.right_margin = 457200
-                section.top_margin = 457200
-                section.bottom_margin = 457200
-
-            # Read the CSV file
-            with open('The-Office-Lines-V4.csv', 'r', encoding='utf-8') as file:
-                reader = csv.DictReader(file)
-                
-                # Filter and format lines
-                current_episode = None
-                for row in reader:
-                    if row['season'] == season and row['episode'] in episodes:
-                        # Add episode header if it's a new episode
-                        if current_episode != row['episode']:
-                            current_episode = row['episode']
-                            heading = doc.add_heading(f"Season {season}, Episode {current_episode}: {row['title']}", level=1)
-                            doc.add_paragraph()  # Add some spacing
-                        
-                        # Format the line with bold speaker
-                        paragraph = doc.add_paragraph()
-                        speaker_part = paragraph.add_run(f"{row['speaker']}: ")
-                        speaker_part.bold = True
-                        paragraph.add_run(row['line'])
-                        
-                        # Minimize spacing between lines
-                        paragraph_format = paragraph.paragraph_format
-                        paragraph_format.space_before = Pt(0)
-                        paragraph_format.space_after = Pt(0)
-                        paragraph_format.line_spacing = WD_LINE_SPACING.SINGLE
-
-            # Create filename based on season and episodes
-            filename_base = f"office_s{season.zfill(2)}e{'-'.join(episodes)}"
-            downloads_path = os.path.expanduser("~/Downloads")
-            docx_filename = os.path.join(downloads_path, f"{filename_base}.docx")
-
-            # Save the Word document
-            doc.save(docx_filename)
-            
-            self.status_var.set(f"Success! File saved as:\n{docx_filename}")
-            
-        except Exception as e:
-            self.status_var.set(f"Error: {str(e)}")
-            messagebox.showerror("Error", str(e))
 
 def main():
     root = tk.Tk()

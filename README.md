@@ -13,7 +13,7 @@ A Python application that generates episode scripts from "The Office" TV show us
   - Character names in bold
   - Clean line spacing
   - Professional margins
-- Automatic saving to current directory (CLI) or Downloads folder (GUI)
+- Automatic saving to Downloads folder (CLI and GUI)
 - Clear status updates and error handling
 
 

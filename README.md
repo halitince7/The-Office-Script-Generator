@@ -55,14 +55,13 @@ python office.py 5 13
 python office.py 5 13,14,15
 ```
 
-Output files will be named:
+Output files will be saved to your Downloads folder with names like:
 - `office_s05e13.docx` (for season 5, episode 13)
 - `office_s05e13-14-15.docx` (for season 5, episodes 13, 14, and 15)
 
 ## File Naming
 
-- GUI version saves to Downloads folder: `~/Downloads/office_s05e13.docx`
-- CLI version saves to current directory: `./office_s05e13.docx`
+- Both GUI and CLI versions save to Downloads folder: `~/Downloads/office_s05e13.docx`
 
 ## Data Source
 
@@ -86,7 +85,7 @@ The application uses `The-Office-Lines-V4.csv`, which contains all dialogue from
 ## Notes
 
 - The CSV file must be in the same directory as the script
-- GUI version saves to Downloads folder, CLI version saves to current directory
+- Both GUI and CLI versions save output files to Downloads folder
 - Both versions provide status updates and error messages
 
 ## Error Handling

@@ -76,8 +76,9 @@ The application uses `The-Office-Lines-V4.csv`, which contains all dialogue from
 
 ```
 .
-├── office_gui.py          # GUI application
-├── office.py             # Command-line tool
+├── office_gui.py           # GUI application
+├── office.py              # Command-line tool
+├── office_core.py         # Shared script generation logic
 ├── The-Office-Lines-V4.csv # Dialogue database
 └── README.md
 ```
